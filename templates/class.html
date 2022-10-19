@@ -6,6 +6,32 @@
 <div class="panel panel-default">
     <div class="panel-heading">{{ spec }}</div>
 </div>
+
+<div class="form-group col-md-3">
+    <select id="slotsDropdown" class="form-control" oninput="searchSlot()">
+        <option>All</option>
+        <option>head</option>
+        <option>neck</option>
+        <option>shoulder</option>
+        <option>back</option>
+        <option>chest</option>
+        <option>wrist</option>
+        <option>hands</option>
+        <option>waist</option>
+        <option>legs</option>
+        <option>back</option>
+        <option>feet</option>
+        <option>finger 1</option>
+        <option>finger 2</option>
+        <option>trinket 1</option>
+        <option>trinket 2</option>
+        <option>weapon</option>
+        <option>off hand</option>
+        <option>relic</option>
+        <option>ranged</option>
+    </select>
+</div>
+
 <div class="form-group col-md-4 col-md-offset-4 pull-right">
     <input type="text" id="searchInput" class="form-control" onkeyup="searchGear()" placeholder="Search for gear.." title="Search">
 </div>
@@ -149,6 +175,27 @@
                     tr[i].style.display = "none";
                 }
             }       
+        }
+    }
+
+
+    function searchSlot() {
+        let dropdown, table, rows, cells, slot, filter;
+        dropdown = document.getElementById("slotsDropdown");
+        table = document.getElementById("data_table");
+        rows = table.getElementsByTagName("tr");
+        filter = dropdown.value;
+
+        for (let row of rows) { // `for...of` loops through the NodeList
+            cells = row.getElementsByTagName("td");
+            slot = cells[1] || null; // gets the 2nd `td` or nothing
+            // if the filter is set to 'All', or this is the header row, or 2nd `td` text matches filter
+            if (filter === "All" || !slot || (filter === slot.textContent)) {
+            row.style.display = ""; // shows this row
+            }
+            else {
+            row.style.display = "none"; // hides this row
+            }
         }
     }
 
