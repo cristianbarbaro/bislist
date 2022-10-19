@@ -13,18 +13,12 @@ def get_index():
     return render_template('index.html')
 
 
-
 @app.route("/class")
 def get_data():
-
     spec = request.args.get('spec')
-
     url = "https://wowtbc.gg/page-data/wotlk/bis-list/{0}/page-data.json".format(spec)
-
     response = requests.get(url)
-
     result = response.json()
-
     bis_list = result["result"]["pageContext"]["bisList"]
 
     return  render_template('class.html', result=bis_list, spec=spec)
@@ -33,9 +27,7 @@ def get_data():
 @app.route("/item_id")
 def get_item_id():
     item_name = request.args.get('name')
-
     url = "https://www.wowhead.com/item={0}&xml".format(item_name)
-
     response = requests.get(url)
     result = xmltodict.parse(response.content)
     item_id = result["wowhead"]["item"]["@id"]
