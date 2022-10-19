@@ -78,7 +78,12 @@
                 a.appendChild(linkText);
                 a.title = item.name;
                 a.href = "#";
-                a.setAttribute("data-wowhead", "item=" + items_id[item.name]);
+                if (localStorage.getItem('language') !== null) {
+                    language = localStorage.getItem('language');
+                } else {
+                    language = "en";
+                }
+                a.setAttribute("data-wowhead", "item=" + items_id[item.name] + "&domain=" + language);
                 // se añade el link a la celda
                 td.appendChild(a);
                 tr.appendChild(td);

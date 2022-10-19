@@ -1,4 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div>
+    <div class="form-group col-md-4 col-md-offset-4">
+        <select id="language" class="form-control">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $('#language').change(function() {
+            localStorage.setItem('language', this.value);
+        });
+        if(localStorage.getItem('language')){
+            $('#language').val(localStorage.getItem('language'));
+        }
+    });
+
+</script>
+
 {% endblock %}
