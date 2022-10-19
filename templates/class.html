@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container col-md-8 col-md-offset-2">
+
+<div class="panel panel-default">
+    <div class="panel-heading">{{ spec }}</div>
+</div>
+<div class="form-group col-md-4 col-md-offset-4 pull-right">
+    <input type="text" id="searchInput" class="form-control" onkeyup="searchGear()" placeholder="Search for gear.." title="Search">
+</div>
+
+<!-- table -->
+<div id="table-container">
+    <table class="table-striped table table-bordered" id="data_table">
+        <thead>
+            <tr>
+                <td>gear</td>
+                <td>slot</td>
+                <td>source</td>
+                <td>BiS</td>
+                <td>in bag</td>
+            </tr>
+        </thead>
+        <tbody id="tbody-container">
+
+        </tbody>
+    </table>
+</div>
+
+<div class="container-fluid">
+    <button type="button" id="clearClassBtn" class="btn btn-danger pull-right" onclick="clearData('{{ spec }}')">Clear</button>
+</div>
+
+<script>
+    result = '{{ result|tojson|safe }}';
+    var spec = "{{ spec }}"
+
+    result = JSON.parse(result);
+
+    function tableCreate() {
+        var tbdy = document.getElementById('tbody-container');
+        // se recorre cada elemento del resultado obtenido.
+        result.forEach(function(item) {
+            if (item.phase.includes("T7") && !item.phase.includes("Pre-Bis")) { //estamos en P7 actualmente
+                var tr = document.createElement('tr');
+                var td = document.createElement('td');
+                var a = document.createElement('a');
+                var linkText = document.createTextNode(item.name);
+                a.appendChild(linkText);
+                a.title = item.name;
+                a.href = "#";
+                // si ya está el item id del objeto en cuestion, directamente se configura la url con el valor correspondiente.
+                if ( item.name in JSON.parse(localStorage.getItem("items_id"))) {
+                    a.setAttribute("data-wowhead", "item=" + JSON.parse(localStorage.getItem("items_id"))[item.name]);
+                }else{
+                    a.setAttribute("onmouseover", "searchItemID(this)");
+                    a.setAttribute("data-wowhead", "item=");
+                }
+                // se añade el link a la celda
+                td.appendChild(a);
+                tr.appendChild(td);
+                td = document.createElement('td');
+                td.appendChild(document.createTextNode(item.slot));
+                tr.appendChild(td);
+                td = document.createElement('td');
+                td.appendChild(document.createTextNode(item.source + " - " + item.source_type));
+                tr.appendChild(td);
+                td = document.createElement('td');
+                if (item.t7.bis == true) {
+                    td.appendChild(document.createTextNode("yes"));
+                } else {
+                    td.appendChild(document.createTextNode("no"));
+                }
+                tr.appendChild(td);
+                td = document.createElement('td');
+                var input = document.createElement('input');
+                input.setAttribute('type', 'checkbox');
+                input.setAttribute('value', 'in_bag');
+                input.setAttribute('onclick', 'saveData()');
+                if (localStorage.getItem(spec) === null) // verifico si hay datos almacenados para la clase buscada.
+                {
+                    input.checked = false;
+                }else{
+                    input.checked = JSON.parse(localStorage.getItem(spec))[item.name];
+                }
+                td.appendChild(input);
+                tr.appendChild(td);
+                tbdy.appendChild(tr);
+            }
+        });
+    }
+
+
+    function saveData()
+    {
+        var TableData;
+        TableData = storeTblValues();
+        TableData = JSON.stringify(TableData);
+    
+        localStorage.setItem(spec, TableData);
+
+        console.log("Datos guardados...");
+
+        function storeTblValues(){
+            var TableData = new Array();
+            $('#data_table tr').each(function(row, tr){
+                TableData[row]={
+                    "gear" : $(tr).find('td:eq(0)').text()
+                    , "in_bag" :$(tr).find('td:eq(4)').find('input[type="checkbox"]').is(':checked')
+                }
+            }); 
+            TableData.shift();  // first row is the table header - so remove
+            result = {};
+            TableData.forEach(function(item, i){
+                result[item["gear"]] = item["in_bag"];
+            });
+            return result;
+        }
+    }
+
+    // si no existe el objeto de items_id, lo debo crear:
+    if (localStorage.getItem("items_id") === null )
+    {
+        data = {};
+        localStorage.setItem("items_id", JSON.stringify(data));
+    }
+
+    function clearData(spec)
+    {
+        localStorage.removeItem(spec);
+        location.reload();
+        console.log("Datos eliminados...");
+    }
+    //{
+    //    localStorage.clear();
+    //    location.reload()
+    //    console.log("Datos para clase borrados...");
+    //}
+
+
+    function searchGear(){
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("data_table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }       
+        }
+    }
+
+    function searchItemID(a){
+        items_id = localStorage.getItem("items_id");
+        items_id = JSON.parse(items_id);
+
+        if (items_id[a.title] === undefined) // si no existe, lo busco y lo almanceno
+        {
+            console.log("Buscando item id...")
+            $.ajax({
+                type: "GET",
+                url: "/item_id?name=" + a.title,
+                success: function(data) {
+                    item_id = data['item_id'];
+                    a.setAttribute("data-wowhead", "item=" + item_id);
+                    items_id[a.title] = item_id;
+                    localStorage.setItem("items_id", JSON.stringify(items_id));
+                }
+          });
+
+        }
+
+    }
+
+    // se crea la tabla al cargar la página.
+    tableCreate();
+
+</script>
+
+{% endblock %}

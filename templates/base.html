@@ -1,0 +1,135 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}{% endblock %}
+
+{% block head %} 
+  {{ super() }}
+  <script>const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};</script>
+  <script src="https://wow.zamimg.com/js/tooltips.js"></script>
+{% endblock %}
+
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Index</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Priest <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=discipline-priest">Discipline Priest</a></li> <!-- https://wowtbc.gg/wotlk/bis-list/discipline-priest/ -->
+            <li><a href="/class?spec=holy-priest">Holy Priest</a></li> <!-- https://wowtbc.gg/wotlk/bis-list/holy-priest/ -->
+            <li><a href="/class?spec=shadow-priest">Shadow Priest</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Druid <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=balance-druid">Balance Druid</a></li>
+            <li><a href="/class?spec=feral-druid">Feral Druid</a></li>
+            <li><a href="/class?spec=restoration-druid">Restoration Druid</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Shaman <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=elemental-shaman">Elemental Shaman</a></li>
+            <li><a href="/class?spec=enhancement-shaman">Enhancement Shaman</a></li>
+            <li><a href="/class?spec=restoration-shaman">Restoration Shaman</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Paladin <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=holy-paladin">Holy Paladin</a></li>
+            <li><a href="/class?spec=retribution-paladin">Retribution Paladin</a></li>
+            <li><a href="/class?spec=retribution-paladin">Protection Paladin</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Mage <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=arcane-mage">Arcane Mage</a></li>
+            <li><a href="/class?spec=fire-mage">Fire Mage</a></li>
+            <li><a href="/class?spec=frost-mage">Frost Mage</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Warlock <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=affliction-warlock">Affliction Warlock</a></li>
+            <li><a href="/class?spec=demonology-warlock">Demonology Warlock</a></li>
+            <li><a href="/class?spec=destruction-warlock">Destruction Warlock</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Hunter <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=beast-mastery-hunter">Beast Mastery Hunter</a></li>
+            <li><a href="/class?spec=marksmanship-hunter">Marksmanship Hunter</a></li>
+            <li><a href="/class?spec=marksmanship-hunter">Survival Hunter</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Rogue <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=assassination-rogue">Assassination Rogue</a></li>
+            <li><a href="/class?spec=combat-rogue">Combat Rogue</a></li>
+            <li><a href="/class?spec=subtlety-rogue">Subtlety Rogue</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Warrior <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/class?spec=arms-warrior">Arms Warrior</a></li>
+            <li><a href="/class?spec=fury-warrior">Fury Warrior</a></li>
+            <li><a href="/class?spec=protection-warrior">Protection Warrior</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Death Knight<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/class?spec=blood-tank-death-knight">Blood Tank Death Knight</a></li>
+              <li><a href="/class?spec=frost-death-knight">Frost Death Knight</a></li>
+              <li><a href="/class?spec=unholy-death-knight">Unholy Death Knight</a></li>
+            </ul>
+          </li>
+
+      </ul>
+    </div>
+  </nav>
+
+{% endblock %}
+
+
+{% block content %}{% endblock %}
