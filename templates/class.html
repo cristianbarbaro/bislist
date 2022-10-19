@@ -4,7 +4,7 @@
 <div class="container col-md-8 col-md-offset-2">
 
 <div class="panel panel-default">
-    <div class="panel-heading">{{ spec }}</div>
+    <div class="panel-heading text-center"><b>{{ spec|striptags|title|replace('-',' ') }}</b></div>
 </div>
 
 <div class="form-group col-md-3">
@@ -57,6 +57,8 @@
 <div class="container-fluid">
     <button type="button" id="clearClassBtn" class="btn btn-danger pull-right" onclick="clearData('{{ spec }}')">Clear</button>
 </div>
+<br>
+
 
 <script>
     var result = '{{ result|tojson|safe }}';
@@ -77,12 +79,13 @@
                 let linkText = document.createTextNode(item.name);
                 a.appendChild(linkText);
                 a.title = item.name;
-                a.href = "#";
                 if (localStorage.getItem('language') !== null) {
                     language = localStorage.getItem('language');
                 } else {
                     language = "en";
                 }
+                a.href = "https://" + language + ".wowhead.com/item=" + items_id[item.name];
+                a.target = "_blank";
                 a.setAttribute("data-wowhead", "item=" + items_id[item.name] + "&domain=" + language);
                 // se añade el link a la celda
                 td.appendChild(a);
