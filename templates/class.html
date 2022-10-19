@@ -34,9 +34,11 @@
 
 <script>
     result = '{{ result|tojson|safe }}';
+    items_id = '{{ items_id|tojson|safe }}';
     var spec = "{{ spec }}"
 
     result = JSON.parse(result);
+    items_id = JSON.parse(items_id);
 
     function tableCreate() {
         var tbdy = document.getElementById('tbody-container');
@@ -50,13 +52,7 @@
                 a.appendChild(linkText);
                 a.title = item.name;
                 a.href = "#";
-                // si ya está el item id del objeto en cuestion, directamente se configura la url con el valor correspondiente.
-                if ( item.name in JSON.parse(localStorage.getItem("items_id"))) {
-                    a.setAttribute("data-wowhead", "item=" + JSON.parse(localStorage.getItem("items_id"))[item.name]);
-                }else{
-                    a.setAttribute("onmouseover", "searchItemID(this)");
-                    a.setAttribute("data-wowhead", "item=");
-                }
+                a.setAttribute("data-wowhead", "item=" + items_id[item.name]);
                 // se añade el link a la celda
                 td.appendChild(a);
                 tr.appendChild(td);
@@ -152,28 +148,6 @@
         }
     }
 
-    
-    function searchItemID(a){
-        items_id = localStorage.getItem("items_id");
-        items_id = JSON.parse(items_id);
-
-        if (items_id[a.title] === undefined) // si no existe, lo busco y lo almanceno
-        {
-            console.log("Buscando item id...")
-            $.ajax({
-                type: "GET",
-                url: "/item_id?name=" + a.title,
-                success: function(data) {
-                    item_id = data['item_id'];
-                    a.setAttribute("data-wowhead", "item=" + item_id);
-                    items_id[a.title] = item_id;
-                    localStorage.setItem("items_id", JSON.stringify(items_id));
-                }
-          });
-
-        }
-
-    }
 
     // se crea la tabla al cargar la página.
     tableCreate();
