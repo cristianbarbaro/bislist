@@ -1,3 +1,4 @@
+from unicodedata import name
 from flask import Flask, render_template, request, jsonify
 import requests
 import json
@@ -17,11 +18,14 @@ def get_db_connection():
 
 
 def get_item_id_by_name(item_name):
-    print(item_name)
     url = "https://www.wowhead.com/item={0}&xml".format(item_name)
     response = requests.get(url)
     result = xmltodict.parse(response.content)
-    item_id = result["wowhead"]["item"]["@id"]
+    # Puede ocurrir que el item no esté en wowhead, en tal caso, se devuelve vacío.
+    if "item" in result["wowhead"]:
+        item_id = result["wowhead"]["item"]["@id"]
+    else: 
+        item_id = ""
     return item_id
 
 
@@ -40,13 +44,15 @@ def get_data():
     # se verifica si se cuenta con el item_id almacenado en la base de datos.
     conn = get_db_connection()
     for item in bis_list:
-        item_name = item["name"]
-        res = conn.execute('SELECT * FROM items WHERE item_name = ?', (item_name,)).fetchone()
-        if res is None:
-            item_id = get_item_id_by_name(item_name)
-            res = conn.execute("INSERT INTO items (item_name, item_id) VALUES (?, ?)", (item_name, item_id))
-            conn.commit()
-            
+        if "name" in item.keys(): # hay algunos items sin nombre, son slots.
+            if "T7" in item["phase"] and not "Pre-Bis" in item["phase"]: # solo se consideran los items de T7.
+                item_name = item["name"]
+                res = conn.execute('SELECT * FROM items WHERE item_name = ?', (item_name,)).fetchone()
+                if res is None:
+                    item_id = get_item_id_by_name(item_name)
+                    res = conn.execute("INSERT INTO items (item_name, item_id) VALUES (?, ?)", (item_name, item_id))
+                    conn.commit()
+
     all_items_id = conn.execute('SELECT item_id, item_name FROM items')
     items_id = {}
     for i in all_items_id.fetchall():
@@ -55,18 +61,6 @@ def get_data():
     conn.close()
 
     return  render_template('class.html', result=bis_list, spec=spec, items_id=items_id)
-
-
-@app.route("/item_id")
-def get_item_id():
-    item_name = request.args.get('name')
-    url = "https://www.wowhead.com/item={0}&xml".format(item_name)
-    response = requests.get(url)
-    result = xmltodict.parse(response.content)
-    item_id = result["wowhead"]["item"]["@id"]
-
-    return jsonify({"item_id": item_id})
-
 
 
 if __name__ == '__main__':
