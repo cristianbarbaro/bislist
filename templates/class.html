@@ -15,11 +15,11 @@
     <table class="table-striped table table-bordered" id="data_table">
         <thead>
             <tr>
-                <td>gear</td>
-                <td>slot</td>
-                <td>source</td>
-                <td>BiS</td>
-                <td>in bag</td>
+                <td class="text-center"><b>Gear</b></td>
+                <td class="text-center"><b>Slot</b></td>
+                <td class="text-center"><b>Drop by</b></td>
+                <td class="text-center"><b>BiS</b></td>
+                <td class="text-center"><b>Dropped</b></td>
             </tr>
         </thead>
         <tbody id="tbody-container">
@@ -33,22 +33,22 @@
 </div>
 
 <script>
-    result = '{{ result|tojson|safe }}';
-    items_id = '{{ items_id|tojson|safe }}';
+    var result = '{{ result|tojson|safe }}';
+    var items_id = '{{ items_id|tojson|safe }}';
     var spec = "{{ spec }}"
 
     result = JSON.parse(result);
     items_id = JSON.parse(items_id);
 
     function tableCreate() {
-        var tbdy = document.getElementById('tbody-container');
+        let tbdy = document.getElementById('tbody-container');
         // se recorre cada elemento del resultado obtenido.
         result.forEach(function(item) {
             if (item.phase.includes("T7") && !item.phase.includes("Pre-Bis")) { //estamos en P7 actualmente
-                var tr = document.createElement('tr');
-                var td = document.createElement('td');
-                var a = document.createElement('a');
-                var linkText = document.createTextNode(item.name);
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                let a = document.createElement('a');
+                let linkText = document.createTextNode(item.name);
                 a.appendChild(linkText);
                 a.title = item.name;
                 a.href = "#";
@@ -57,12 +57,14 @@
                 td.appendChild(a);
                 tr.appendChild(td);
                 td = document.createElement('td');
+                td.setAttribute("class", "text-center");
                 td.appendChild(document.createTextNode(item.slot));
                 tr.appendChild(td);
                 td = document.createElement('td');
                 td.appendChild(document.createTextNode(item.source + " - " + item.source_type));
                 tr.appendChild(td);
                 td = document.createElement('td');
+                td.setAttribute("class", "text-center");
                 if (item.t7.bis == true) {
                     td.appendChild(document.createTextNode("yes"));
                 } else {
@@ -70,9 +72,11 @@
                 }
                 tr.appendChild(td);
                 td = document.createElement('td');
-                var input = document.createElement('input');
+                td.setAttribute("class", "text-center");
+                let input = document.createElement('input');
                 input.setAttribute('type', 'checkbox');
                 input.setAttribute('value', 'in_bag');
+                input.setAttribute('id', "_checkbox");
                 input.setAttribute('onclick', 'saveData()');
                 if (localStorage.getItem(spec) === null) // verifico si hay datos almacenados para la clase buscada.
                 {
@@ -90,7 +94,7 @@
 
     function saveData()
     {
-        var TableData;
+        let TableData;
         TableData = storeTblValues();
         TableData = JSON.stringify(TableData);
     
@@ -99,7 +103,7 @@
         console.log("Datos guardados...");
 
         function storeTblValues(){
-            var TableData = new Array();
+            let TableData = new Array();
             $('#data_table tr').each(function(row, tr){
                 TableData[row]={
                     "gear" : $(tr).find('td:eq(0)').text()
@@ -131,7 +135,7 @@
 
 
     function searchGear(){
-        var input, filter, table, tr, td, i;
+        let input, filter, table, tr, td, i;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("data_table");
