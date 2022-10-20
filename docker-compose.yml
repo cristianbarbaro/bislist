@@ -1,0 +1,9 @@
+version: '2'
+services:
+    bisweb:
+        build: .
+        container_name: bislist
+        ports:
+            - "5000:5000"
+        volumes:
+            - .:/code
