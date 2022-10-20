@@ -2,6 +2,7 @@ from unicodedata import name
 from flask import Flask, render_template, request, jsonify
 import requests
 import json
+import os
 import sqlite3
 import xmltodict
 from flask_bootstrap import Bootstrap
@@ -12,7 +13,8 @@ bootstrap = Bootstrap(app)
 
 
 def get_db_connection():
-    conn = sqlite3.connect('db/database.sqlite3')
+    FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect("{0}/db/database.sqlite3".format(FILE_DIR))
     #conn.row_factory = sqlite3.Row
     return conn
 
