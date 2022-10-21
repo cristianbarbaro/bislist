@@ -7,32 +7,34 @@
     <div class="panel-heading text-center"><b>{{ spec|striptags|title|replace('-',' ') }}</b></div>
 </div>
 
-<div class="form-group col-md-4 pull-left">
-    <select id="slotsDropdown" class="form-control" oninput="searchSlot()">
-        <option>All</option>
-        <option>head</option>
-        <option>neck</option>
-        <option>shoulder</option>
-        <option>back</option>
-        <option>chest</option>
-        <option>wrist</option>
-        <option>hands</option>
-        <option>waist</option>
-        <option>legs</option>
-        <option>feet</option>
-        <option>finger 1</option>
-        <option>finger 2</option>
-        <option>trinket 1</option>
-        <option>trinket 2</option>
-        <option>weapon</option>
-        <option>off hand</option>
-        <option>relic</option>
-        <option>ranged</option>
-    </select>
-</div>
+<div class="row">
+    <div class="form-group col-md-4 pull-left">
+        <select id="slotsDropdown" class="form-control" oninput="searchSlot()">
+            <option>All</option>
+            <option>head</option>
+            <option>neck</option>
+            <option>shoulder</option>
+            <option>back</option>
+            <option>chest</option>
+            <option>wrist</option>
+            <option>hands</option>
+            <option>waist</option>
+            <option>legs</option>
+            <option>feet</option>
+            <option>finger 1</option>
+            <option>finger 2</option>
+            <option>trinket 1</option>
+            <option>trinket 2</option>
+            <option>weapon</option>
+            <option>off hand</option>
+            <option>relic</option>
+            <option>ranged</option>
+        </select>
+    </div>
 
-<div class="form-group col-md-4 col-md-offset-4 pull-right">
-    <input type="text" id="searchInput" class="form-control" onkeyup="searchGear()" placeholder="Search for gear.." title="Search">
+    <div class="form-group col-md-4 pull-right">
+        <input type="text" id="searchInput" class="form-control" onkeyup="searchGearDrop()" placeholder="Search for gear or drop..." title="Search">
+    </div>
 </div>
 
 <!-- table -->
@@ -167,6 +169,7 @@
     }
 
 
+    /*
     function searchGear(){
         let input, filter, table, tr, td, i;
         input = document.getElementById("searchInput");
@@ -184,12 +187,34 @@
             }       
         }
     }
+    */
 
+    function searchGearDrop(){
+        let input, table, rows, cells, gear, drop, filter;
+        input = document.getElementById("searchInput");
+        table = document.getElementById("tbody-container");
+        rows = table.getElementsByTagName("tr");
+        filter = input.value.toUpperCase();
+
+        for (let row of rows) {
+            cells = row.getElementsByTagName("td");
+            gear = cells[0] || null;
+            drop = cells[2] || null;
+            if (gear.textContent.toUpperCase().includes(filter)) {
+                row.style.display = "";
+            }else if (drop.textContent.toUpperCase().includes(filter)){
+                row.style.display = "";
+            }
+            else {
+                row.style.display = "none";
+            }
+        }
+    }
 
     function searchSlot() {
         let dropdown, table, rows, cells, slot, filter;
         dropdown = document.getElementById("slotsDropdown");
-        table = document.getElementById("data_table");
+        table = document.getElementById("tbody-container");
         rows = table.getElementsByTagName("tr");
         filter = dropdown.value;
 
